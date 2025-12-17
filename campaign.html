@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد کمپین چای بلوط | آذر ۱۴۰۴</title>
+    
+    <!-- Font: Vazirmatn -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --accent-color: #ffb347; /* Tea color */
+            --secondary-accent: #4cd137;
+            --neu-shadow: 5px 5px 10px rgba(0,0,0,0.2), -5px -5px 10px rgba(255,255,255,0.05);
+            --font-main: 'Vazirmatn', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Decorative Background Blobs */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #8e44ad; border-radius: 50%; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #f39c12; border-radius: 50%; }
+
+        /* Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        h2 { font-size: 1.5rem; color: var(--accent-color); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+
+        /* Grid Layouts */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+
+        /* Neumorphism Elements (KPIs) */
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--neu-shadow);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .kpi-icon { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent-color); }
+        .kpi-value { font-size: 1.8rem; font-weight: bold; margin: 10px 0; }
+        .kpi-label { font-size: 0.9rem; opacity: 0.8; }
+
+        /* Lists */
+        ul.strategy-list { list-style: none; }
+        ul.strategy-list li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+        ul.strategy-list li i { margin-left: 10px; color: var(--secondary-accent); }
+
+        /* Table */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { background: rgba(0,0,0,0.2); color: var(--accent-color); }
+        tr:hover td { background: rgba(255,255,255,0.05); }
+
+        /* Journey Diagram Steps */
+        .journey-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .step {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--neu-shadow);
+        }
+        .step i { font-size: 2rem; color: var(--accent-color); margin-bottom: 10px; }
+        .step::after {
+            content: '➜';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.5);
+        }
+        .step:last-child::after { display: none; }
+
+        /* Timeline */
+        .timeline-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-progress {
+            width: 70%; /* Demo */
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-accent));
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+        .milestone {
+            position: absolute;
+            top: -35px;
+            transform: translateX(50%);
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        .milestone::after {
+            content: '';
+            display: block;
+            width: 2px;
+            height: 15px;
+            background: #fff;
+            margin: 5px auto 0;
+        }
+        .ms-start { right: 0; }
+        .ms-yalda { right: 80%; }
+
+        @media (max-width: 768px) {
+            .step::after { content: '⬇'; left: 50%; top: 100%; transform: translateX(-50%); }
+            .journey-container { flex-direction: column; }
+            .step { width: 100%; margin-bottom: 10px; }
+        }
+
+.dashboard-logo {
+    max-height: 100px;       /* ارتفاع لوگو را محدود می‌کند */
+    width: auto;             /* نسبت ابعاد را حفظ می‌کند */
+    margin-bottom: 20px;     /* فاصله با متن پایین */
+    display: inline-block;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); /* سایه برای زیبایی بیشتر */
+    transition: transform 0.3s ease;
+}
+
+.dashboard-logo:hover {
+    transform: scale(1.05); /* کمی بزرگ‌نمایی هنگام موس روی لوگو */
+}
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="dashboard-container">
+        
+<!-- Header Section -->
+<div class="card header">
+    <!-- LOGO ADDED HERE -->
+    <img src="logo.png" alt="لوگو چای بلوط" class="dashboard-logo">
+    
+    <h1><i class="fas fa-leaf"></i> پروپوزال جامع کمپین فروش و مارکتینگ چای بلوط</h1>
+    <p>طرح انگیزشی توسعه بازار در استان‌ها | آذر ۱۴۰۴</p>
+</div>
+
+        <!-- KPIs Section -->
+        <div class="grid-4">
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-store"></i></div>
+                <div class="kpi-value">۲۰+</div>
+                <div class="kpi-label">حداقل فروشگاه VIP هر نماینده</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-box-open"></i></div>
+                <div class="kpi-value">۵۰</div>
+                <div class="kpi-label">حداقل سفارش کارتن در هر فروشگاه</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-gift"></i></div>
+                <div class="kpi-value">۱۰۰-۶۰</div>
+                <div class="kpi-label">تعداد جوایز قرعه‌کشی در هر استان</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="kpi-value">یلدا</div>
+                <div class="kpi-label">اولین مرحله قرعه‌کشی</div>
+            </div>
+        </div>
+
+        <!-- Main Strategy & Objectives -->
+        <div class="grid-2">
+            <div class="card">
+                <h2><i class="fas fa-bullseye"></i> مقدمه و اهداف استراتژیک</h2>
+                <p style="text-align: justify; line-height: 1.8;">
+                    با عنایت به آغاز فاز توسعه بازار برند چای بلوط در سطح کشور و فعالیت نمایندگان استانی، این کمپین با اهداف زیر طراحی شده است:
+                    <br><br>
+                    ۱. افزایش سرعت گردش کالا (Rotation) در قفسه فروشگاه‌ها.<br>
+                    ۲. ارتقای انگیزه شبکه فروش و نمایندگان.<br>
+                    ۳. ایجاد آگاهی از برند (Brand Awareness) و هیجان میان مصرف‌کنندگان.<br>
+                    ۴. گردآوری بانک اطلاعاتی جامع از مشتریان نهایی (Database Marketing).
+                </p>
+                <br>
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    * رویکرد کمپین: ترکیبی از محرک‌های فروش (Sales Activation) و بازاریابی محلی (Local Marketing) با حداکثر اثربخشی بودجه.
+                </p>
+            </div>
+            <div class="card">
+                <h2><i class="fas fa-project-diagram"></i> محورهای چهارگانه اجرایی</h2>
+                <ul class="strategy-list">
+                    <li><i class="fas fa-users"></i> بهره‌گیری از بلاگرهای بومی جهت تولید محتوای اثرگذار محلی.</li>
+                    <li><i class="fas fa-ticket-alt"></i> برگزاری جشنواره قرعه‌کشی انحصاری در سطح خرده‌فروشی.</li>
+                    <li><i class="fas fa-layer-group"></i> استقرار ابزارهای تبلیغاتی نقطه فروش (POSM) و پودیوم‌های اختصاصی.</li>
+                    <li><i class="fas fa-ad"></i> اکران تبلیغات محیطی سبک (بیلبورد و استند شهری) در مقیاس محدود.</li>
+                </ul>
+                <!-- Visual Chart Placeholder -->
+                <div style="height: 150px; position: relative; margin-top: 15px;">
+                    <canvas id="strategyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Package & Representative Plan -->
+        <div class="card">
+            <h2><i class="fas fa-handshake"></i> بسته پیشنهادی نمایندگان و ساختار اجرایی</h2>
+            <p style="margin-bottom: 20px;">
+                به منظور ایجاد انگیزه مضاعف جهت سفارش‌گذاری حجمی، طرح زیر برای نمایندگان فعال تدوین شده است. 
+                هر نماینده استانی موظف است حداقل <strong>۲۰ فروشگاه VIP</strong> معرفی نماید که هر فروشگاه متعهد به خرید حداقل <strong>۵۰ کارتن</strong> از سبد محصولات چای بلوط می‌باشد.
+            </p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>پاداش / حمایت مارکتینگی</th>
+                            <th>شرح خدمات و توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>۱</td>
+                            <td style="color: var(--accent-color); font-weight: bold;">پودیوم فروشگاهی اختصاصی</td>
+                            <td>تخصیص به هر فروشگاه VIP جهت چیدمان ویژه و متمایز.</td>
+                        </tr>
+                        <tr>
+                            <td>۲</td>
+                            <td style="color: var(--accent-color); font-weight: bold;">جوایز قرعه‌کشی (۶۰ تا ۱۰۰ عدد)</td>
+                            <td>ارسال هدایا (نظیر چای‌ساز یا هدایای بومی متناسب با استان) جهت برگزاری قرعه‌کشی.</td>
+                        </tr>
+                        <tr>
+                            <td>۳</td>
+                            <td style="color: var(--accent-color); font-weight: bold;">همکاری با اینفلوئنسرهای محلی</td>
+                            <td>حضور بلاگر در فروشگاه جهت معرفی محصول و پروموت جشنواره فروش.</td>
+                        </tr>
+                        <tr>
+                            <td>۴</td>
+                            <td style="color: var(--accent-color); font-weight: bold;">تبلیغات محیطی سبک</td>
+                            <td>نصب بنر یا بیلبوردهای محلی در شعاع فروشگاه‌های منتخب.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Customer Journey (Translated & Formalized) -->
+        <div class="card">
+            <h2><i class="fas fa-route"></i> فرآیند شرکت در جشنواره (سفر مشتری)</h2>
+            <p>مکانیزم اجرایی قرعه‌کشی و جمع‌آوری اطلاعات مشتریان به شرح زیر طراحی شده است:</p>
+            
+            <div class="journey-container">
+                <div class="step">
+                    <i class="fas fa-shopping-basket"></i>
+                    <h3>۱. خرید محصول</h3>
+                    <p>خرید چای بلوط از فروشگاه VIP و دریافت کارت قرعه‌کشی.</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-qrcode"></i>
+                    <h3>۲. اسکن کارت</h3>
+                    <p>اسکن QR کد روی کارت یا جستجوی شناسه اینستاگرام برند.</p>
+                </div>
+                <div class="step">
+                    <i class="fab fa-instagram"></i>
+                    <h3>۳. تعامل دیجیتال</h3>
+                    <p>دنبال کردن صفحه اینستاگرام و کلیک بر روی لینک بیو.</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-file-signature"></i>
+                    <h3>۴. ثبت اطلاعات</h3>
+                    <p>تکمیل فرم آنلاین و ورود کد یکتا جهت ثبت در دیتابیس.</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-trophy"></i>
+                    <h3>۵. قرعه‌کشی</h3>
+                    <p>شرکت در قرعه‌کشی نهایی و اهدای جوایز.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="card">
+            <h2><i class="fas fa-hourglass-half"></i> زمان‌بندی اجرا</h2>
+            <p>کمپین در آذرماه ۱۴۰۴ کلید خواهد خورد. ساختار طرح به گونه‌ای است که برای تمامی فروشگاه‌های جدیدی که محصول را در قفسه (Shelf) قرار می‌دهند، در بازه‌های زمانی مختلف قابل تکرار است.</p>
+            
+            <div style="margin-top: 40px; padding: 0 20px;">
+                <div class="timeline-bar">
+                    <div class="timeline-progress"></div>
+                    <div class="milestone ms-start">
+                        <span>۱ آذر ۱۴۰۴</span><br>
+                        <small>آغاز کمپین</small>
+                    </div>
+                    <div class="milestone ms-yalda">
+                        <span>۳۰ آذر (شب یلدا)</span><br>
+                        <small style="color: var(--accent-color); font-weight: bold;">اولین قرعه‌کشی بزرگ</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts for Charts -->
+    <script>
+        // Chart Configuration
+        const ctx = document.getElementById('strategyChart').getContext('2d');
+        const strategyChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['بلاگر مارکتینگ', 'قرعه‌کشی و جوایز', 'تجهیز فروشگاهی (POSM)', 'تبلیغات محیطی'],
+                datasets: [{
+                    data: [25, 35, 25, 15], // Estimated weight based on text description
+                    backgroundColor: [
+                        'rgba(255, 179, 71, 0.8)',
+                        'rgba(76, 209, 55, 0.8)',
+                        'rgba(255, 255, 255, 0.8)',
+                        'rgba(30, 60, 114, 0.8)'
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#fff',
+                            font: {
+                                family: 'Vazirmatn'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
